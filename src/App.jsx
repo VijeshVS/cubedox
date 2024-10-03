@@ -1,21 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Avatar, Divider } from "antd";
+import Navbar from "./components/Navbar";
+import WalletConnect from "./pages/WalletConnect";
+import { useWallet } from "@solana/wallet-adapter-react";
+import {toast} from 'sonner'
 
 const App = () => {
+  const wallet = useWallet();
+  
+  useEffect(()=>{
+    if(wallet.publicKey){
+      toast.success("Wallet connected successfully!!")
+    }
+  },[wallet])
+
   return (
     <main className="h-screen">
-      <nav className="flex justify-between h-[12vh] border-b-2 shadow-sm px-8 items-center">
-        <div className="space-x-4 flex">
-          <img src="./icon.png" className="w-8 h-8" alt="" />
-          <h1 className="text-3xl font-bold">CubeDox</h1>
-        </div>
-        <div>
-          <Avatar
-            className="h-12 w-12 bg-yellow-200"
-            src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"
-          />
-        </div>
-      </nav>
+      <Navbar/>
+      {wallet.publicKey?<></>:<WalletConnect/>}
     </main>
   );
 };
